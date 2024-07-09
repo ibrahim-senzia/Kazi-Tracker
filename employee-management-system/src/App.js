@@ -7,17 +7,20 @@ import { FaUser, FaClock, FaRegCalendarAlt, FaStar, FaTasks } from 'react-icons/
 
 function App() {
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex w-full h-screen mt-10">
       <div className="w-full flex items-center justify-center lg:w-1/2">
         <Routes>
-          <Route path='LogIn' element={ <LogIn/>} />
-          <Route path='Register' element={ <Register/>} />
+          {/* <Switch> */}
+          <Route exact path='/' element={ <LogIn/>} />
+          <Route path="/LogIn" element={ <LogIn/>} />
+          <Route path='/Register' element={ <Register/>} />
+          {/* </Switch> */}
         </Routes>
       
       </div>
 
     
-        <div className="lg:flex w-1/2 h-screen bg-gray-200 flex flex-col items-center justify-center p-8 shadow-md">
+        <div className="hidden relative lg:flex h-full w-1/2 bg-gray-200 flex flex-col items-center rounded-l-lg justify-center p-8 shadow-md">
       <h1 className="text-4xl font-bold text-gray-800 mb-10">Welcome to KaziTracker</h1>
       <p className="text-lg text-gray-700 mb-8">
         Step into a world where your professional journey is streamlined and efficient. At KaziTracker, expect to:
