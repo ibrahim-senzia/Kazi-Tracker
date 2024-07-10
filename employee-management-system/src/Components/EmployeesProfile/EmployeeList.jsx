@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './EmployeeList.css';
-import EmployeeProfile from './EmployeeProfile';
 
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
-    const [showForm, setShowForm] = useState(false);
-    const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchEmployees();
@@ -23,8 +22,11 @@ const EmployeeList = () => {
     };
 
     const handleEdit = (employee) => {
-        setSelectedEmployee(employee);
-        setShowForm(true);
+        navigate('/dashboard/profile', { state: { employee } });
+    };
+
+    const handleAdd = () => {
+        navigate('/dashboard/profile');
     };
 
     const handleDelete = async (id) => {
@@ -36,24 +38,14 @@ const EmployeeList = () => {
         }
     };
 
-    const handleFormSubmit = (newEmployee) => {
-        if (selectedEmployee) {
-            setEmployees(employees.map(emp => (emp.id === newEmployee.id ? newEmployee : emp)));
-        } else {
-            setEmployees([...employees, newEmployee]);
-        }
-        setShowForm(false);
-        setSelectedEmployee(null);
-    };
-
     const filteredEmployees = employees.filter(employee =>
         employee.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div className="container">
-            <h2>Employee Profile</h2>
-            <button className="addButton" onClick={() => setShowForm(true)}>Add Employee</button>
+            <h2>Employee List</h2>
+            <button className="addButton" onClick={handleAdd}>Add Employee</button>
             <div className="Search-Box">
                 <input
                     type="text"
@@ -90,16 +82,6 @@ const EmployeeList = () => {
                     ))}
                 </tbody>
             </table>
-            {showForm && (
-                <EmployeeProfile
-                    employee={selectedEmployee}
-                    onClose={() => {
-                        setShowForm(false);
-                        setSelectedEmployee(null);
-                    }}
-                    onSubmit={handleFormSubmit}
-                />
-            )}
         </div>
     );
 };

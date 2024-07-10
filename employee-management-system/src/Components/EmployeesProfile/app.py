@@ -5,7 +5,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///employees.db'
 db = SQLAlchemy(app)
-CORS(app)  # Enable CORS for all routes
+CORS(app)  
 
 class Employee(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,7 +65,6 @@ def add_employee():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
-
 @app.route('/employees/<int:id>', methods=['PUT'])
 def update_employee(id):
     employee = Employee.query.get_or_404(id)
@@ -74,7 +73,7 @@ def update_employee(id):
     employee.contact_info = data.get('contact_info', employee.contact_info)
     employee.job_title = data.get('job_title', employee.job_title)
     employee.department = data.get('department', employee.department)
-    employee.salary = float(data.get('salary', employee.salary).replace('$', ''))
+    employee.salary = float(data.get('salary', employee.salary))
     try:
         db.session.commit()
         return jsonify({
@@ -87,7 +86,9 @@ def update_employee(id):
         })
     except Exception as e:
         db.session.rollback()
+        print(f"Error updating employee with id {id}: {e}")
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/employees/<int:id>', methods=['DELETE'])
 def delete_employee(id):
@@ -100,7 +101,6 @@ def delete_employee(id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-# Add this route to your Flask application
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
@@ -115,5 +115,5 @@ def dashboard():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Create tables at the start of the application
+        db.create_all()
     app.run(debug=True)

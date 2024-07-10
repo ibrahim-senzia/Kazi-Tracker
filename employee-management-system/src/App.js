@@ -2,6 +2,10 @@ import React from "react";
 import './index.css';
 import LogIn from "./Components/LogIn";
 import Register from "./Components/Register";
+import Dashboard from './Components/Dashboard/Dashboard';
+import EmployeeList from './Components/EmployeesProfile/EmployeeList';
+import DashboardContent from './Components/Dashboard/DashboardContent';
+
 import {Route, Routes } from 'react-router-dom';
 import { FaUser, FaClock, FaRegCalendarAlt, FaStar, FaTasks } from 'react-icons/fa';
 
@@ -14,12 +18,15 @@ function App() {
           <Route exact path='/' element={ <LogIn/>} />
           <Route path="/LogIn" element={ <LogIn/>} />
           <Route path='/Register' element={ <Register/>} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<EmployeeList />} />
+          <Route path="/dashboard" element={<DashboardContent />} />
           {/* </Switch> */}
         </Routes>
-      
+
       </div>
 
-    
+
         <div className="hidden relative lg:flex h-full w-1/2 bg-gray-200 flex flex-col items-center rounded-l-lg justify-center p-8 shadow-md">
       <h1 className="text-4xl font-bold text-gray-800 mb-10">Welcome to KaziTracker</h1>
       <p className="text-lg text-gray-700 mb-8">
