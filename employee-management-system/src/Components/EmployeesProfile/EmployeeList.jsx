@@ -22,11 +22,11 @@ const EmployeeList = () => {
     };
 
     const handleEdit = (employee) => {
-        navigate('/dashboard/profile', { state: { employee } });
+        navigate('/profile', { state: { employee } });
     };
 
     const handleAdd = () => {
-        navigate('/dashboard/profile');
+        navigate('/profile');
     };
 
     const handleDelete = async (id) => {

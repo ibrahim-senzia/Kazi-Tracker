@@ -4,6 +4,7 @@ import LogIn from "./Components/LogIn";
 import Register from "./Components/Register";
 import Dashboard from './Components/Dashboard/Dashboard';
 import EmployeeList from './Components/EmployeesProfile/EmployeeList';
+import EmployeeProfile from "./Components/EmployeesProfile/EmployeeProfile";
 import DashboardContent from './Components/Dashboard/DashboardContent';
 
 import {Route, Routes } from 'react-router-dom';
@@ -19,7 +20,9 @@ function App() {
           <Route path="/LogIn" element={ <LogIn/>} />
           <Route path='/Register' element={ <Register/>} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<EmployeeList />} />
+          <Route path="/manage-employees" element={<EmployeeList />} />
+          <Route path="/profile" element={<EmployeeProfile />} />
+
           <Route path="/dashboard" element={<DashboardContent />} />
           {/* </Switch> */}
         </Routes>

@@ -54,7 +54,7 @@ const EmployeeProfile = () => {
             setSuccessMessage('Employee saved successfully!');
             setTimeout(() => {
                 setSuccessMessage('');
-                navigate('/dashboard/manage-employees');
+                navigate('/manage-employees');
             }, 2000);
         } catch (error) {
             console.error('Error saving employee data:', error);
@@ -109,7 +109,7 @@ const EmployeeProfile = () => {
                     <button onClick={handleSave} className="save-button">
                         {employee ? 'Save' : 'Add Employee'}
                     </button>
-                    <button onClick={() => navigate('/dashboard/manage-employees')} className="cancel-button">
+                    <button onClick={() => navigate('/manage-employees')} className="cancel-button">
                         Cancel
                     </button>
                 </div>
