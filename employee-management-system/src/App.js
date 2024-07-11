@@ -6,6 +6,7 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import EmployeeList from './Components/EmployeesProfile/EmployeeList';
 import EmployeeProfile from "./Components/EmployeesProfile/EmployeeProfile";
 import DashboardContent from './Components/Dashboard/DashboardContent';
+import { UserProvider } from "./Components/Context/UserContext";
 
 import {Route, Routes } from 'react-router-dom';
 import { FaUser, FaClock, FaRegCalendarAlt, FaStar, FaTasks } from 'react-icons/fa';
@@ -14,18 +15,20 @@ function App() {
   return (
     <div className="flex w-full h-screen mt-10">
       <div className="w-full flex items-center justify-center lg:w-1/2">
-        <Routes>
-          {/* <Switch> */}
-          <Route exact path='/' element={ <LogIn/>} />
-          <Route path="/LogIn" element={ <LogIn/>} />
-          <Route path='/Register' element={ <Register/>} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/manage-employees" element={<EmployeeList />} />
-          <Route path="/profile" element={<EmployeeProfile />} />
+      <UserProvider>
+          <Routes>
+            {/* <Switch> */}
+            <Route exact path='/' element={ <LogIn/>} />
+            <Route path="/LogIn" element={ <LogIn/>} />
+            <Route path='/Register' element={ <Register/>} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/manage-employees" element={<EmployeeList />} />
+            <Route path="/profile" element={<EmployeeProfile />} />
 
-          <Route path="/dashboard" element={<DashboardContent />} />
-          {/* </Switch> */}
-        </Routes>
+            <Route path="/dashboard" element={<DashboardContent />} />
+            {/* </Switch> */}
+          </Routes>
+        </UserProvider>
 
       </div>
 
