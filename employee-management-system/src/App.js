@@ -7,6 +7,7 @@ import EmployeeList from './Components/EmployeesProfile/EmployeeList';
 import EmployeeProfile from "./Components/EmployeesProfile/EmployeeProfile";
 import DashboardContent from './Components/Dashboard/DashboardContent';
 import { UserProvider } from "./Components/Context/UserContext";
+import LeaveManagement from "./Components/LeaveManager/LeaveManagement";
 
 import {Route, Routes } from 'react-router-dom';
 import { FaUser, FaClock, FaRegCalendarAlt, FaStar, FaTasks } from 'react-icons/fa';
@@ -24,6 +25,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/manage-employees" element={<EmployeeList />} />
             <Route path="/profile" element={<EmployeeProfile />} />
+            <Route path="/LeaveManagement" element={<LeaveManagement/>} />
 
             <Route path="/dashboard" element={<DashboardContent />} />
             {/* </Switch> */}

@@ -3,6 +3,7 @@ import { Link, Outlet } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Dashboard.css";
 
+
 function Dashboard() {
     return (
         <div className="dashboard-container">
@@ -29,6 +30,12 @@ function Dashboard() {
                         <Link to="/profile">
                             <i className="fs-4 bi-person"></i>
                             <span>Employees Profile</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/LeaveManagement">
+                            <i className="fs-4 bi-person"></i>
+                            <span>LeaveManagement</span>
                         </Link>
                     </li>
                     <li>

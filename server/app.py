@@ -25,7 +25,6 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 
-
 # Login
 @app.route("/LogIn", methods=["POST"])
 def login():
