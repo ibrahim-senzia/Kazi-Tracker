@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Dashboard.css";
+import { UserContext } from "../Context/UserContext"
 
 
 function Dashboard() {
+
+    // For logout eventhandle
+    const {currentUser, logout} = useContext(UserContext)
+
     return (
         <div className="dashboard-container">
             <div className="sidebar">
@@ -41,7 +46,7 @@ function Dashboard() {
                     <li>
                         <Link to="/logout">
                             <i className="fs-4 bi-box-arrow-right"></i>
-                            <span>Logout</span>
+                            <span onClick={()=>logout()}>Logout</span>
                         </Link>
                     </li>
                 </ul>
