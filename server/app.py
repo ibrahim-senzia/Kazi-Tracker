@@ -64,3 +64,34 @@ def logout():
     jti = get_jwt()["jti"]
     BLACKLIST.add(jti)
     return jsonify({"success":"Successfully logged out"}), 200
+
+# Add user
+@app.route('/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    new_user = User(name=data['name'], email=data['email'], password=bcrypt.generate_password_hash( data['password'] ).decode("utf-8") ) 
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'success': 'User created successfully'}), 201
+
+# Get single user
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.get_or_404(user_id)
+    return jsonify({'id': user.id, 'name': user.name, 'email': user.email})
+
+# Update user
+@app.route('/users/<int:user_id>', methods=['PUT'])
+# @jwt_required()
+def update_user(user_id):
+    user = User.query.get_or_404(user_id)
+    data = request.get_json()
+
+    user.name = data['name']
+    user.email = data['email']
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'})
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

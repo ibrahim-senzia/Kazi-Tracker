@@ -6,7 +6,6 @@ import { UserContext } from './Context/UserContext'
 function LogIn() {
 
     const {login} = useContext(UserContext)
-    const [name, setName] = useState()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
 
@@ -15,11 +14,11 @@ function LogIn() {
     function handleSubmit(e){
         e.preventDefault()
 
-        login(name, email, password)
+        login(email, password)
 
     }
 
-    console.log(name, email, password);
+    console.log(email, password);
     
 
     return (
@@ -28,10 +27,6 @@ function LogIn() {
         <p className='font-medium text-lg text-gray-500 mt-4'>Please Enter your details.</p>
         <form onSubmit={handleSubmit}>
             <div className='mt-8'>
-                <div>
-                    <label className='text-lg font-medium' for='firstName'>Name</label>
-                    <input className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent' placeholder='Enter your name' type='text' id='firstName' value={name || "" } onChange={(e) => setName(e.target.value)} />
-                </div>
                 <div>
                     <label className='text-lg font-medium'>Email</label>
                     <input className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent' placeholder='Enter your email' type='email' value={email || ""} onChange={(e)=> setEmail(e.target.value)} />
