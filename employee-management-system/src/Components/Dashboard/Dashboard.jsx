@@ -1,14 +1,17 @@
 import React, { useContext } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Dashboard.css";
-import { UserContext } from "../Context/UserContext"
-
+import { UserContext } from "../Context/UserContext";
 
 function Dashboard() {
+    const { logout } = useContext(UserContext);
+    const navigate = useNavigate();
 
-    // For logout eventhandle
-    const {currentUser, logout} = useContext(UserContext)
+    const handleLogout = () => {
+        logout();
+        navigate("/");
+    };
 
     return (
         <div className="dashboard-container">
@@ -26,28 +29,30 @@ function Dashboard() {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/manage-employees">
+                        <Link to="/dashboard/manage-employees">
                             <i className="fs-4 bi-people"></i>
                             <span>Manage Employees</span>
                         </Link>
                     </li>
                     <li>
-                        <Link to="/profile">
+                        <Link to="/dashboard/profile">
                             <i className="fs-4 bi-person"></i>
                             <span>Employees Profile</span>
                         </Link>
                     </li>
                     <li>
-                        <Link to="/LeaveManagement">
+                        <Link to="/dashboard/LeaveManagement">
                             <i className="fs-4 bi-person"></i>
-                            <span>LeaveManagement</span>
+                            <span>Leave Management</span>
                         </Link>
                     </li>
                     <li>
-                        <Link to="/logout">
+                        <span onClick={handleLogout} style={{ cursor: "pointer" }}>
+                        <Link>
                             <i className="fs-4 bi-box-arrow-right"></i>
-                            <span onClick={()=>logout()}>Logout</span>
+                            <span>Logout</span>
                         </Link>
+                        </span>
                     </li>
                 </ul>
             </div>

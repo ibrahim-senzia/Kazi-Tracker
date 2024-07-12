@@ -38,11 +38,10 @@ const EmployeeProfile = () => {
 
     const handleSave = async () => {
         try {
-            let response;
             if (employee) {
-                response = await axios.put(`http://localhost:5000/employees/${employee.id}`, formData);
+                await axios.put(`http://localhost:5000/employees/${employee.id}`, formData);
             } else {
-                response = await axios.post('http://localhost:5000/employees', formData);
+                await axios.post('http://localhost:5000/employees', formData);
                 setFormData({
                     name: '',
                     contact_info: '',
@@ -54,7 +53,7 @@ const EmployeeProfile = () => {
             setSuccessMessage('Employee saved successfully!');
             setTimeout(() => {
                 setSuccessMessage('');
-                navigate('/manage-employees');
+                navigate("/dashboard/manage-employees");
             }, 2000);
         } catch (error) {
             console.error('Error saving employee data:', error);
@@ -109,7 +108,7 @@ const EmployeeProfile = () => {
                     <button onClick={handleSave} className="save-button">
                         {employee ? 'Save' : 'Add Employee'}
                     </button>
-                    <button onClick={() => navigate('/manage-employees')} className="cancel-button">
+                    <button onClick={() => navigate("/dashboard/manage-employees")} className="cancel-button">
                         Cancel
                     </button>
                 </div>

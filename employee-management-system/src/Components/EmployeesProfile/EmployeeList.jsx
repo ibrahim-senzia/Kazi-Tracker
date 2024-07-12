@@ -22,11 +22,11 @@ const EmployeeList = () => {
     };
 
     const handleEdit = (employee) => {
-        navigate('/profile', { state: { employee } });
+        navigate("/dashboard/profile", { state: { employee } });
     };
 
     const handleAdd = () => {
-        navigate('/profile');
+        navigate("/dashboard/profile");
     };
 
     const handleDelete = async (id) => {
@@ -74,7 +74,7 @@ const EmployeeList = () => {
                             <td>{employee.job_title}</td>
                             <td>{employee.department}</td>
                             <td>{employee.salary}</td>
-                            <td>
+                            <td className="action-cell">
                                 <button className="editButton" onClick={() => handleEdit(employee)}>Edit</button>
                                 <button className="deleteButton" onClick={() => handleDelete(employee.id)}>Delete</button>
                             </td>
