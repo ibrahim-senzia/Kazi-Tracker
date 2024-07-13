@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./LeaveManagement.css";
 
 function LeaveManagement() {
   const [leaves, setLeaves] = useState([]);
-  const [employeeId, setEmployeeId] = useState('');
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [leaveType, setLeaveType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
   const [status, setStatus] = useState('pending');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchLeaves();
+    fetchEmployees();
+  }, []);
 
   const fetchLeaves = async () => {
     try {
@@ -24,9 +32,19 @@ function LeaveManagement() {
     }
   };
 
-  useEffect(() => {
-    fetchLeaves();
-  }, []);
+  const fetchEmployees = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/employees');
+      if (!response.ok) {
+        throw new Error('Failed to fetch employees');
+      }
+      const data = await response.json();
+      setEmployees(data);
+    } catch (error) {
+      console.error('Error fetching employees:', error.message);
+      // Handle error gracefully (e.g., show a message to the user)
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +54,7 @@ function LeaveManagement() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ employee_id: employeeId, leave_type: leaveType, start_date: startDate, end_date: endDate, reason: reason, status: status })
+        body: JSON.stringify({ employee_id: selectedEmployee.id, leave_type: leaveType, start_date: startDate, end_date: endDate, reason: reason, status: status })
       });
       if (!response.ok) {
         throw new Error('Failed to submit leave');
@@ -44,6 +62,12 @@ function LeaveManagement() {
       const result = await response.json();
       alert(result.message);
       fetchLeaves();
+      // Clear form fields after submission
+      setLeaveType('');
+      setStartDate('');
+      setEndDate('');
+      setReason('');
+      setStatus('pending');
     } catch (error) {
       console.error('Error submitting leave:', error.message);
       // Handle error gracefully (e.g., show a message to the user)
@@ -88,13 +112,24 @@ function LeaveManagement() {
     }
   };
 
+  const handleEmployeeChange = (e) => {
+    const employeeId = parseInt(e.target.value); // Assuming your select returns an ID
+    const selectedEmp = employees.find(emp => emp.id === employeeId);
+    setSelectedEmployee(selectedEmp);
+  };
+
   return (
     <div>
       <h2>Leave Management</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Employee ID:</label>
-          <input type="text" value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} required />
+          <label>Select Employee:</label>
+          <select value={selectedEmployee ? selectedEmployee.id : ''} onChange={handleEmployeeChange} required>
+            <option value="">Select Employee</option>
+            {employees.map(emp => (
+              <option key={emp.id} value={emp.id}>{emp.name}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label>Leave Type:</label>
@@ -127,7 +162,7 @@ function LeaveManagement() {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Employee ID</th>
+            <th>Employee Name</th>
             <th>Leave Type</th>
             <th>Start Date</th>
             <th>End Date</th>
@@ -140,7 +175,7 @@ function LeaveManagement() {
           {leaves.map((leave) => (
             <tr key={leave.id}>
               <td>{leave.id}</td>
-              <td>{leave.employee_id}</td>
+              <td>{leave.employee_name}</td> {/* Assuming your API provides employee name */}
               <td>{leave.leave_type}</td>
               <td>{leave.start_date}</td>
               <td>{leave.end_date}</td>
