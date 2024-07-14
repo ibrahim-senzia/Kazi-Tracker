@@ -46,4 +46,6 @@ To run WorkForce Manager locally, follow these steps:
    git clone <repository_url>
    cd Kazi-Tracker
 ## To run the backend
- to start your backed type (flask run --port 8080) from the server folder 
+ to start your backed type (flask run --port 8080) from the server folder
+
+ also navigate into the EmployeeProfile folder in the components folder and run (python app.py / python3 app.py) to start the employee server.
