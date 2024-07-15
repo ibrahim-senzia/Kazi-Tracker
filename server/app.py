@@ -20,7 +20,7 @@ app.config["SECRET_KEY"] = "JKSRVHJVFBSRDFV"+str(random.randint(1,1000000000000)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-from models import db, User
+from models import db, User, Employee, Leave
 migrate = Migrate(app, db)
 db.init_app(app)
 
@@ -92,6 +92,196 @@ def update_user(user_id):
     db.session.commit()
     return jsonify({'message': 'User updated successfully'})
 
+# Employee
+@app.route('/employees', methods=['GET'])
+def get_employees():
+    employees = Employee.query.all()
+    return jsonify([
+        {
+            'id': emp.id,
+            'name': emp.name,
+            'contact_info': emp.contact_info,
+            'job_title': emp.job_title,
+            'department': emp.department,
+            'salary': emp.salary,
+        } for emp in employees
+    ])
+
+@app.route('/employees/<int:id>', methods=['GET'])
+def get_employee(id):
+    employee = Employee.query.get_or_404(id)
+    return jsonify({
+        'id': employee.id,
+        'name': employee.name,
+        'contact_info': employee.contact_info,
+        'job_title': employee.job_title,
+        'department': employee.department,
+        'salary': employee.salary,
+    })
+
+@app.route('/employees', methods=['POST'])
+def add_employee():
+    try:
+        data = request.get_json()
+        new_employee = Employee(
+            name=data['name'],
+            contact_info=data.get('contact_info', ''),
+            job_title=data.get('job_title', ''),
+            department=data.get('department', ''),
+            salary=float(data['salary'].replace('$', ''))
+        )
+        db.session.add(new_employee)
+        db.session.commit()
+        return jsonify({
+            'id': new_employee.id,
+            'name': new_employee.name,
+            'contact_info': new_employee.contact_info,
+            'job_title': new_employee.job_title,
+            'department': new_employee.department,
+            'salary': new_employee.salary,
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+@app.route('/employees/<int:id>', methods=['PUT'])
+def update_employee(id):
+    employee = Employee.query.get_or_404(id)
+    data = request.get_json()
+    employee.name = data.get('name', employee.name)
+    employee.contact_info = data.get('contact_info', employee.contact_info)
+    employee.job_title = data.get('job_title', employee.job_title)
+    employee.department = data.get('department', employee.department)
+    employee.salary = float(data.get('salary', employee.salary))
+    try:
+        db.session.commit()
+        return jsonify({
+            'id': employee.id,
+            'name': employee.name,
+            'contact_info': employee.contact_info,
+            'job_title': employee.job_title,
+            'department': employee.department,
+            'salary': employee.salary,
+        })
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating employee with id {id}: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/employees/<int:id>', methods=['DELETE'])
+def delete_employee(id):
+    employee = Employee.query.get_or_404(id)
+    try:
+        db.session.delete(employee)
+        db.session.commit()
+        return '', 204
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    total_employees = Employee.query.count()
+    total_salary = db.session.query(db.func.sum(Employee.salary)).scalar() or 0.0
+
+    return jsonify({
+        'totalEmployees': total_employees,
+        'totalSalary': float(total_salary)
+    })
+
+#Leaves Route
+@app.route('/leaves', methods=['GET'])
+def get_leaves():
+    leaves = Leave.query.all()
+    return jsonify([
+        {
+            'id': leave.id,
+            'employee_id': leave.employee_id,
+            'leave_type': leave.leave_type,
+            'start_date': leave.start_date.isoformat(),
+            'end_date': leave.end_date.isoformat(),
+            'reason': leave.reason,
+            'status': leave.status,
+        } for leave in leaves
+    ])
+
+@app.route('/leaves/<int:id>', methods=['GET'])
+def get_leave(id):
+    leave = Leave.query.get_or_404(id)
+    return jsonify({
+        'id': leave.id,
+        'employee_id': leave.employee_id,
+        'leave_type': leave.leave_type,
+        'start_date': leave.start_date.isoformat(),
+        'end_date': leave.end_date.isoformat(),
+        'reason': leave.reason,
+        'status': leave.status,
+    })
+
+@app.route('/leaves', methods=['POST'])
+def add_leave():
+    try:
+        data = request.get_json()
+        new_leave = Leave(
+            employee_id=data['employee_id'],
+            leave_type=data['leave_type'],
+            start_date=data['start_date'],
+            end_date=data['end_date'],
+            reason=data['reason'],
+            status=data.get('status', 'pending')
+        )
+        db.session.add(new_leave)
+        db.session.commit()
+        return jsonify({
+            'id': new_leave.id,
+            'employee_id': new_leave.employee_id,
+            'leave_type': new_leave.leave_type,
+            'start_date': new_leave.start_date.isoformat(),
+            'end_date': new_leave.end_date.isoformat(),
+            'reason': new_leave.reason,
+            'status': new_leave.status,
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/leaves/<int:id>', methods=['PUT'])
+def update_leave(id):
+    leave = Leave.query.get_or_404(id)
+    data = request.get_json()
+    leave.employee_id = data.get('employee_id', leave.employee_id)
+    leave.leave_type = data.get('leave_type', leave.leave_type)
+    leave.start_date = data.get('start_date', leave.start_date)
+    leave.end_date = data.get('end_date', leave.end_date)
+    leave.reason = data.get('reason', leave.reason)
+    leave.status = data.get('status', leave.status)
+    try:
+        db.session.commit()
+        return jsonify({
+            'id': leave.id,
+            'employee_id': leave.employee_id,
+            'leave_type': leave.leave_type,
+            'start_date': leave.start_date.isoformat(),
+            'end_date': leave.end_date.isoformat(),
+            'reason': leave.reason,
+            'status': leave.status,
+        })
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating leave with id {id}: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/leaves/<int:id>', methods=['DELETE'])
+def delete_leave(id):
+    leave = Leave.query.get_or_404(id)
+    try:
+        db.session.delete(leave)
+        db.session.commit()
+        return '', 204
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

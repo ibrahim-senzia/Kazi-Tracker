@@ -39,9 +39,9 @@ const EmployeeProfile = () => {
     const handleSave = async () => {
         try {
             if (employee) {
-                await axios.put(`http://localhost:5000/employees/${employee.id}`, formData);
+                await axios.put(`http://localhost:8080/employees/${employee.id}`, formData);
             } else {
-                await axios.post('http://localhost:5000/employees', formData);
+                await axios.post('http://localhost:8080/employees', formData);
                 setFormData({
                     name: '',
                     contact_info: '',

@@ -20,7 +20,7 @@ function LeaveManagement() {
 
   const fetchLeaves = async () => {
     try {
-      const response = await fetch('http://localhost:5000/leaves');
+      const response = await fetch('http://localhost:8080/leaves');
       if (!response.ok) {
         throw new Error('Failed to fetch leaves');
       }
@@ -34,7 +34,7 @@ function LeaveManagement() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('http://localhost:5000/employees');
+      const response = await fetch('http://localhost:8080/employees');
       if (!response.ok) {
         throw new Error('Failed to fetch employees');
       }
@@ -49,7 +49,7 @@ function LeaveManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/leaves', {
+      const response = await fetch('http://localhost:8080/leaves', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -76,7 +76,7 @@ function LeaveManagement() {
 
   const handleUpdate = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/leaves/${id}`, {
+      const response = await fetch(`http://localhost:8080/leaves/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ function LeaveManagement() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/leaves/${id}`, {
+      const response = await fetch(`http://localhost:8080/leaves/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
@@ -175,7 +175,7 @@ function LeaveManagement() {
           {leaves.map((leave) => (
             <tr key={leave.id}>
               <td>{leave.id}</td>
-              <td>{leave.employee_name}</td> {/* Assuming your API provides employee name */}
+              <td>{leave.employee_name}</td>
               <td>{leave.leave_type}</td>
               <td>{leave.start_date}</td>
               <td>{leave.end_date}</td>
