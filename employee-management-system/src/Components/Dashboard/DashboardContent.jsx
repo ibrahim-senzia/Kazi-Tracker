@@ -13,7 +13,7 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/dashboard');
+            const response = await axios.get('http://localhost:8080/dashboard');
             const { totalEmployees, totalSalary } = response.data; // Ensure your backend returns these fields correctly
             setTotalEmployees(totalEmployees);
             setTotalSalary(totalSalary);
